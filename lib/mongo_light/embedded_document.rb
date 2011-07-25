@@ -1,3 +1,4 @@
+require 'active_support'
 module MongoLight
   module EmbeddedDocument
     extend ActiveSupport::Concern
