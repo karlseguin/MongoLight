@@ -4,7 +4,7 @@ module MongoLight
       BSON::ObjectId.new
     end
     def self.valid?(id)
-      return false if id.blank? || id.class == Fixnum
+      return false if id.nil? || id.class == Fixnum
       return true if id.class == BSON::ObjectId
       BSON::ObjectId.legal?(id)
     end

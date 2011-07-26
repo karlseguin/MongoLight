@@ -16,3 +16,10 @@ RSpec.configure do |config|
     end
   end
 end
+
+
+class String
+  def tableize
+    to_s
+  end
+end

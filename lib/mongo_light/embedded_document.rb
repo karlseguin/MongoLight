@@ -18,7 +18,7 @@ module MongoLight
         end
       end
       def map(raw)
-        return {} if raw.blank? || !raw.is_a?(Hash)
+        return {} if raw.nil? || !raw.is_a?(Hash)
         hash = {}
         raw.each do |key, value|
           if value.is_a?(EmbeddedDocument)
@@ -38,7 +38,7 @@ module MongoLight
         options
       end
       def unmap(data, raw = false)
-        return {} if data.blank? || !data.is_a?(Hash)
+        return {} if data.nil? || !data.is_a?(Hash)
         hash = {}
         data.each do |key, value|
           if @unmap[key].is_a?(Hash)
