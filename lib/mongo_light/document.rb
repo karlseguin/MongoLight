@@ -70,11 +70,11 @@ module MongoLight
       def collection
         self.class.collection
       end
-      def save
-        collection.save(self.class.map(@attributes))
+      def save(safe = false)
+        collection.save(self.class.map(@attributes), {:safe => safe})
       end
       def save!
-        collection.save(self.class.map(@attributes), {:safe => true})
+        save(true)
       end
     end
   end
