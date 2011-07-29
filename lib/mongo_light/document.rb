@@ -20,7 +20,7 @@ module MongoLight
           return nil
         end
         if opts.delete(:raw)
-          return unmap(found)
+          return unmap(found, true)
         end
         self.new(unmap(found))
       end
