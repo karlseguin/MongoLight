@@ -31,5 +31,4 @@ describe 'save behavior' do
     lambda{Factory.build(:simple, {:name => 'paul', :power => 49}).save!}.should raise_error(Mongo::OperationFailure)
     Simple.count.should == 1
   end
-
 end

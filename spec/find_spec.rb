@@ -44,12 +44,12 @@ describe 'find behavior' do
   it "returns a document by id" do
     document = Factory.create(:simple)
     found = Simple.find_by_id(document.id)
-    found.id.should == document.id
+    found.should == document
   end
   it "returns a document by string id" do
     document = Factory.create(:simple)
     found = Simple.find_by_id(document.id.to_s)
-    found.id.should == document.id
+    found.should == document
   end
   it "returns nil if the document isn't found by id" do
     Simple.find_by_id(MongoLight::Id.new).should be_nil
