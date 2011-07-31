@@ -54,10 +54,15 @@ Next, use the following fancy syntax for your root document:
 
 	class User
 		include MongoLight::Document
-		mongo_accessor({:name => :name, password => :pw, :email => :e, :comments => {:field => :c, :class => Comment}})
+		mongo_accessor({:name => :name, password => :pw, :email => :e, :comment => {:field => :c, :class => Comment}})
 	end
 
 Again, this'll make `comments` accessible on your objects, but store it within the `c` field.
+
+If you want an array of embedded documents, simply specify `:array => true`:
+
+	...
+	:comments => {:field => :c, :class => Comment, array => true}})
 
 Please note that aliasing completely fails when querying embedded documents - you need to use the shortened name:
 

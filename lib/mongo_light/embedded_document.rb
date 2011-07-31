@@ -11,7 +11,7 @@ module MongoLight
           define_method(k) { @attributes[k] }
           define_method("#{k}=") {|value| @attributes[k] = value }
           if v.is_a?(Hash)
-            @unmap[v[:field].to_s] = {:prop => k, :class => v[:class]}
+            @unmap[v[:field].to_s] = {:prop => k, :class => v[:class], :array => v[:array]}
           else
             @unmap[v.to_s] = k
           end
@@ -21,14 +21,17 @@ module MongoLight
         return {} if raw.nil? || !raw.is_a?(Hash)
         hash = {}
         raw.each do |key, value|
+          sym = key.to_sym
           if value.is_a?(EmbeddedDocument)
             v = value.class.map(value.attributes)
           elsif value.is_a?(Hash)
             v = map(value)
+          elsif value.is_a?(Array) && @map[sym].is_a?(Hash) && @map[sym][:array]
+            v = value.map{|vv| vv.class.map(vv.attributes)}
           else
             v = value
           end
-          hash[map_key(key.to_sym)] = v
+          hash[map_key(sym)] = v
         end
         return hash
       end
@@ -44,7 +47,11 @@ module MongoLight
           if @unmap[key].is_a?(Hash)
             real_key = @unmap[key][:prop]
             c = @unmap[key][:class]
-            v = raw ? c.unmap(value) : c.new(c.unmap(value))
+            if @unmap[key][:array]
+              v = value.map{|vv| raw ? c.unmap(vv) : c.new(c.unmap(vv))}
+            else
+              v = raw ? c.unmap(value) : c.new(c.unmap(value))
+            end
           else
             real_key = key == '_id' ? :_id : @unmap[key]
             v = value
