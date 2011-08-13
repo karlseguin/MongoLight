@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.summary            = 'A Lightweight ORM for Rails and MongoDB'
   s.require_path       = 'lib'
   s.authors            = ['Karl Seguin']
-  s.email              = ['karlseguin@gmail.com']
+  s.email              = ['karl@openmymind.net']
   s.version            = MongoLight::Version
   s.platform           = Gem::Platform::RUBY
   s.files              = Dir.glob("{lib}/**/*") + %w[license readme.markdown]
