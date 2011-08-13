@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe 'find behavior' do
   it "maps a document to a model" do
-    id = Factory.create(:simple, {:name => 'paul', :power => 49}).id
+    id = FactoryGirl.create(:simple, {:name => 'paul', :power => 49}).id
     found = Simple.find_one({:name => 'paul'})
     found.name.should == 'paul'
     found.power.should == 49
     found.id.should == id
   end
   it "returns a model's raw data" do
-    id = Factory.create(:simple, {:name => 'jessica', :power => 58}).id
+    id = FactoryGirl.create(:simple, {:name => 'jessica', :power => 58}).id
     found = Simple.find_one({:power => 58}, {:raw => true})
     found[:name].should == 'jessica'
     found[:power].should == 58
@@ -19,8 +19,8 @@ describe 'find behavior' do
     Simple.find_one({:blah => 'heh'}).should be_nil
   end
   it "maps multiple documents to a models" do
-    id1 = Factory.create(:simple, {:name => 'duncan', :power => 3223}).id
-    id2 = Factory.create(:simple, {:name => 'gurney', :power => 1033}).id
+    id1 = FactoryGirl.create(:simple, {:name => 'duncan', :power => 3223}).id
+    id2 = FactoryGirl.create(:simple, {:name => 'gurney', :power => 1033}).id
     found = Simple.find.to_a
     found.count.should == 2
     found[0].name.should == 'duncan'
@@ -31,8 +31,8 @@ describe 'find behavior' do
     found[1].id.should == id2
   end
   it "returns a model's raw data" do
-    id1 = Factory.create(:simple, {:name => 'duncan', :power => 3223}).id
-    id2 = Factory.create(:simple, {:name => 'gurney', :power => 1033}).id
+    id1 = FactoryGirl.create(:simple, {:name => 'duncan', :power => 3223}).id
+    id2 = FactoryGirl.create(:simple, {:name => 'gurney', :power => 1033}).id
     found = Simple.find({}, {:raw => true}).to_a
     found.count.should == 2
     found[0].should == {:_id => id1, :name => 'duncan', :power => 3223}
@@ -42,12 +42,12 @@ describe 'find behavior' do
     Simple.find({:blah => 'heh'}).to_a.count.should == 0
   end
   it "returns a document by id" do
-    document = Factory.create(:simple)
+    document = FactoryGirl.create(:simple)
     found = Simple.find_by_id(document.id)
     found.should == document
   end
   it "returns a document by string id" do
-    document = Factory.create(:simple)
+    document = FactoryGirl.create(:simple)
     found = Simple.find_by_id(document.id.to_s)
     found.should == document
   end
@@ -56,9 +56,9 @@ describe 'find behavior' do
   end
   
   it "counts the number of matching documents" do
-    Factory.create(:simple)
-    Factory.create(:simple)
-    Factory.create(:simple, {:power => 'spice'})
+    FactoryGirl.create(:simple)
+    FactoryGirl.create(:simple)
+    FactoryGirl.create(:simple, {:power => 'spice'})
     Simple.count.should == 3
     Simple.count({:power => 'spice'}).should == 1
   end
