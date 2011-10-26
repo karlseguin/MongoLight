@@ -64,12 +64,19 @@ module MongoLight
         return key unless @map.include?(key)
         @map[key].is_a?(Hash) ? @map[key][:field] : @map[key]
       end
+      def map_include?(key)
+        @map.include?(key)
+      end
     end
     module InstanceMethods
       def initialize(attributes = {})
-        @attributes = attributes
+        @attributes = {}
         attributes.each do |k,v|
-          send("#{k}=", v)
+          if self.class.map_include?(k)
+            @attributes[k] = v
+          else
+            send("#{k}=", v)
+          end
         end
       end
       def [](name)

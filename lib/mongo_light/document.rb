@@ -45,10 +45,14 @@ module MongoLight
     end
     module InstanceMethods
       def initialize(attributes = {})
-        attributes[:_id] = Id.new unless attributes.include?('_id') || attributes.include?(:_id)
-        @attributes = attributes
+        attributes = {} unless attributes
+        @attributes = {:_id => (attributes['_id'] || attributes[:_id] || Id.new)}
         attributes.each do |k,v|
-          send("#{k}=", v)  unless k == :_id || k == '_id' 
+          if self.class.map_include?(k)
+            @attributes[k] = v
+          elsif k != :_id && k != '_id'
+            send("#{k}=", v)
+          end
         end
       end
       def eql?(other)
@@ -70,11 +74,12 @@ module MongoLight
       def collection
         self.class.collection
       end
-      def save(safe = false)
-        collection.save(self.class.map(@attributes), {:safe => safe})
+      def save(options = nil)
+        opts = !options || options.include?(:safe) ? options : {:safe => options}
+        collection.save(self.class.map(@attributes), opts || {})
       end
-      def save!
-        save(true)
+      def save!(options = {})
+        save({:safe => true}.merge(options))
       end
     end
   end

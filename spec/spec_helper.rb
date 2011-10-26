@@ -1,4 +1,3 @@
-
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'support'))
 
 Dir[File.join(File.dirname(__FILE__), '..', 'lib/*.rb')].each {|file| require file }

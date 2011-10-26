@@ -7,6 +7,12 @@ describe 'model behavior' do
     s.power.should == 9001
   end
   
+  it "loads an empty object" do
+    s = Simple.new(nil)
+    s.name.should be_nil
+    s.power.should be_nil
+  end
+  
   it "generates an id" do
     MongoLight::Id.stub!(:new).and_return('i will not fear')
     Simple.new.id.should == 'i will not fear'
