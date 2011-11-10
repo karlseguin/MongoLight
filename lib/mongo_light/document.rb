@@ -15,14 +15,10 @@ module MongoLight
         found.nil? ? nil : self.new(unmap(found))
       end
       def find_one(selector = {}, opts={})
-        found = collection.find_one(map(selector))
-        if found.nil?
-          return nil
-        end
-        if opts.delete(:raw)
-          return unmap(found, true)
-        end
-        self.new(unmap(found))
+        raw = opts.delete(:raw) || false
+        found = collection.find_one(map(selector), map_options(opts))
+        return nil if found.nil?
+        return raw ? unmap(found, true) : self.new(unmap(found))
       end
       def find(selector={}, opts={}, collection = nil)
         raw = opts.delete(:raw) || false

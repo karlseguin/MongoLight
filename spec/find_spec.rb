@@ -15,6 +15,11 @@ describe 'find behavior' do
     found[:power].should == 58
     found[:_id].should == id
   end
+  it "returns the specified fields" do
+    id = FactoryGirl.create(:simple, {:name => 'jessica', :power => 58}).id
+    found = Simple.find_one({:power => 58}, {:raw => true, :fields => {:_id => false, :name => true}})
+    found.should == {:name => 'jessica'}
+  end
   it "return nil if the doucment isn't found" do
     Simple.find_one({:blah => 'heh'}).should be_nil
   end
