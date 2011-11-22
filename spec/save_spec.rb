@@ -50,7 +50,7 @@ describe 'save behavior' do
     Simple.count.should == 1
   end
   
-  it "does not skip majority write concern by default" do
+  it "does not skip replica write concern by default" do
     begin
       Simple.new.save(:w => true)
       true.should be_false
@@ -59,11 +59,19 @@ describe 'save behavior' do
     end
   end
   
-  it "skips majority write concern when told to do so" do
+  it "skips replica write concern when told to do so" do
     MongoLight.configure do |config|
       config.skip_replica_concern = true
     end
     Simple.new.save(:w => true)
+    Simple.count.should == 1
+  end
+  
+  it "skips replica write concern doesn't do anything when not writing to replicas" do
+    MongoLight.configure do |config|
+      config.skip_replica_concern = true
+    end
+    Simple.new.save
     Simple.count.should == 1
   end
 end

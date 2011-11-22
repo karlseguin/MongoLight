@@ -72,7 +72,7 @@ module MongoLight
       end
       def save(options = nil)
         opts = !options || options.include?(:safe) ? options : {:safe => options}
-        opts[:safe].delete(:w) if MongoLight.configuration.skip_replica_concern && opts.include?(:safe) && opts[:safe].is_a?(Hash)
+        opts[:safe].delete(:w) if MongoLight.configuration.skip_replica_concern && opts && opts.include?(:safe) && opts[:safe].is_a?(Hash)
         collection.save(self.class.map(@attributes), opts || {})
       end
       def save!(options = {})
