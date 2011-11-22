@@ -6,11 +6,17 @@ The only Rails dependency is on ActiveSupport::Concern.
 The wrapper fits a specific use-case (mine).
 
 ## Setup ##
-During initialization (such as in an initializer), call `MongoLight::Connection.setup`, supplying 2 parameters. The first is a MongoDB connection (that you get from the core driver). The second parameter is the database name. For example:
+Configure MongoLight via `MongoLight.configure`:
 
-	MongoLight::Connection.setup(Mongo::Connection.new, 'test')
+	MongoLight.configure do |config|
+	  config.connection = Mongo::Connection.new
+	  config.database = 'mongolight_tests'
+	end
 
 This'll automatically handle Passenger forking issues (if Passenger is running).
+
+## replica cocnern and testing ##
+For safe writes, I like to use `w:majority`. However, MongoDB will raise an exception if you use this while not using replica sets. This can make testing code more of a pain than necessary. If you configure MongoLight with `config.skip_replica_concern = true`, then `:w => X` or `:w => :majority` will automatically be stripped when calling `save(:w => majority)` or `save!(:w => 3)`.
 
 ## Documents ##
 To define a document include `MongoLight::Document` and define your properties using the `mongo_accessor` method:

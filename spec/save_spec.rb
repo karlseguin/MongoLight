@@ -49,4 +49,21 @@ describe 'save behavior' do
     lambda{FactoryGirl.build(:simple, {:name => 'paul', :power => 49}).save({:bah => true})}.should raise_error(ArgumentError)
     Simple.count.should == 1
   end
+  
+  it "does not skip majority write concern by default" do
+    begin
+      Simple.new.save(:w => true)
+      true.should be_false
+    rescue Mongo::OperationFailure => e
+      e.message.should == ': norepl'
+    end
+  end
+  
+  it "skips majority write concern when told to do so" do
+    MongoLight.configure do |config|
+      config.skip_replica_concern = true
+    end
+    Simple.new.save(:w => true)
+    Simple.count.should == 1
+  end
 end

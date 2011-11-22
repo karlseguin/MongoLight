@@ -2,10 +2,10 @@ require 'mongo'
 
 module MongoLight
   module Connection 
-
-    def self.setup(connection, database_name)
-      @@connection = connection
-      @@database = @@connection.db(database_name)
+    
+    def self.setup(configuration)
+      @@connection = configuration.connection
+      @@database = @@connection.db(configuration.database)
       handle_passenger_forking
     end
     
