@@ -14,21 +14,21 @@ module MongoLight
         found = collection.find_one(real_id)
         found.nil? ? nil : self.new(unmap(found))
       end
-      def find_one(selector = {}, opts={})
+      def find_one(selector = {}, opts = {})
         raw = opts.delete(:raw) || false
         found = collection.find_one(map(selector), map_options(opts))
         return nil if found.nil?
         return raw ? unmap(found, true) : self.new(unmap(found))
       end
-      def find(selector={}, opts={}, collection = nil)
+      def find(selector = {}, opts = {}, collection = nil)
         raw = opts.delete(:raw) || false
         opts[:transformer] = Proc.new{|data| raw ? unmap(data, raw) : self.new(unmap(data)) }
         c = collection || self.collection
         c.find(map(selector), map_options(opts))
       end
-      def remove(selector={}, collection = nil)
+      def remove(selector = {}, options = {}, collection = nil)
         c = collection || self.collection
-        c.remove(map(selector))
+        c.remove(map(selector), options)
       end
       def update(selector, document, options = {}, collection = nil)
         c = collection || self.collection

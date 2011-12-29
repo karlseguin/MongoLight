@@ -9,6 +9,13 @@ describe 'remove behavior' do
     Simple.count({:name => 'jessica'}).should == 1
   end
   
+  it "removes the matching documents with options" do
+    FactoryGirl.create(:simple, {:name => 'paul', :power => 49})
+    FactoryGirl.create(:simple, {:name => 'jessica', :power => 123})
+    r = Simple.remove({:power => 49}, {:safe => true})
+    r['n'].should == 1
+  end
+  
   it "removes all documents" do
     FactoryGirl.create(:simple, {:name => 'paul', :power => 49})
     FactoryGirl.create(:simple, {:name => 'jessica', :power => 123})
