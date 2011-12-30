@@ -26,6 +26,16 @@ module MongoLight
         c = collection || self.collection
         c.find(map(selector), map_options(opts))
       end
+      def find_and_modify(options = {}, collection = nil)
+        raw = options.delete(:raw) || false
+        options[:query] = map(options[:query]) if options[:query]
+        options[:update] = map(options[:update]) if options[:update]
+        options[:sort] = map_options(options[:sort]) if options[:sort]
+        c = collection || self.collection
+        found = c.find_and_modify(options)
+        return nil if found.nil?
+        raw ? unmap(found) : self.new(unmap(found))
+      end
       def remove(selector = {}, options = {}, collection = nil)
         c = collection || self.collection
         c.remove(map(selector), options)
