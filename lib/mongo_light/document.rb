@@ -31,6 +31,7 @@ module MongoLight
         options[:query] = map(options[:query]) if options[:query]
         options[:update] = map(options[:update]) if options[:update]
         options[:sort] = map_options(options[:sort]) if options[:sort]
+        options[:fields] = map_options(options[:fields]) if options[:fields]
         c = collection || self.collection
         found = c.find_and_modify(options)
         return nil if found.nil?
