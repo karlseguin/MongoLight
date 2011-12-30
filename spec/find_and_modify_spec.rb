@@ -26,4 +26,10 @@ describe 'find and modify behavior' do
     Simple.count.should == 1
     Simple.count({:name => 'paul', :power => 22}).should == 1
   end
+  
+  it "returns the selected fields" do
+    id = FactoryGirl.create(:simple, {:name => 'paul', :power => 49}).id
+    found = Simple.find_and_modify({:raw => true, :fields => {:_id => false, :power => true}, :new => true, :query => {:name => 'paul'}, :update => {'$set' => {:power => 22}}})
+    found.should == {:power => 22}
+  end
 end

@@ -30,8 +30,7 @@ module MongoLight
         raw = options.delete(:raw) || false
         options[:query] = map(options[:query]) if options[:query]
         options[:update] = map(options[:update]) if options[:update]
-        options[:sort] = map_options(options[:sort]) if options[:sort]
-        options[:fields] = map_options(options[:fields]) if options[:fields]
+        options.merge(map_options(options))
         c = collection || self.collection
         found = c.find_and_modify(options)
         return nil if found.nil?
