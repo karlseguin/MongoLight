@@ -15,7 +15,7 @@ Configure MongoLight via `MongoLight.configure`:
 
 This'll automatically handle Passenger forking issues (if Passenger is running).
 
-## replica cocnern and testing ##
+## replica concern and testing ##
 For safe writes, I like to use `w:majority`. However, MongoDB will raise an exception if you use this while not using replica sets. This can make testing code more of a pain than necessary. If you configure MongoLight with `config.skip_replica_concern = true`, then `:w => X` or `:w => :majority` will automatically be stripped when calling `save(:w => majority)` or `save!(:w => 3)`. (For example, you could do `config.skip_replica_concern =  Rails.env.test?`)
 
 ## Documents ##
