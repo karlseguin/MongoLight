@@ -68,23 +68,21 @@ module MongoLight
         @map.include?(key)
       end
     end
-    module InstanceMethods
-      def initialize(attributes = {})
-        @attributes = {}
-        attributes.each do |k,v|
-          if self.class.map_include?(k)
-            @attributes[k] = v
-          else
-            send("#{k}=", v)
-          end
+    def initialize(attributes = {})
+      @attributes = {}
+      attributes.each do |k,v|
+        if self.class.map_include?(k)
+          @attributes[k] = v
+        else
+          send("#{k}=", v)
         end
       end
-      def [](name)
-        @attributes[name]
-      end
-      def attributes
-        @attributes
-      end
+    end
+    def [](name)
+      @attributes[name]
+    end
+    def attributes
+      @attributes
     end
   end
 end

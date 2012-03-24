@@ -53,45 +53,44 @@ module MongoLight
         c.find(map(selector)).count
       end
     end
-    module InstanceMethods
-      def initialize(attributes = {})
-        attributes = {} unless attributes
-        @attributes = {:_id => (attributes['_id'] || attributes[:_id] || Id.new)}
-        attributes.each do |k,v|
-          if self.class.map_include?(k)
-            @attributes[k] = v
-          elsif k != :_id && k != '_id'
-            send("#{k}=", v)
-          end
+    
+    def initialize(attributes = {})
+      attributes = {} unless attributes
+      @attributes = {:_id => (attributes['_id'] || attributes[:_id] || Id.new)}
+      attributes.each do |k,v|
+        if self.class.map_include?(k)
+          @attributes[k] = v
+        elsif k != :_id && k != '_id'
+          send("#{k}=", v)
         end
       end
-      def eql?(other)
-        other.is_a?(self.class) && id == other.id
-      end
-      alias :== :eql?
-      def hash
-        id.hash
-      end
-      def id
-        @attributes[:_id] || @attributes['_id']
-      end
-      def id=(value)
-        @attributes[:_id] = value
-      end
-      def ==(other)
-        other.class == self.class && id == other.id
-      end
-      def collection
-        self.class.collection
-      end
-      def save(options = nil)
-        opts = !options || options.include?(:safe) ? options : {:safe => options}
-        opts[:safe].delete(:w) if MongoLight.configuration.skip_replica_concern && opts && opts.include?(:safe) && opts[:safe].is_a?(Hash)
-        collection.save(self.class.map(@attributes), opts || {})
-      end
-      def save!(options = {})
-        save({:safe => true}.merge(options))
-      end
+    end
+    def eql?(other)
+      other.is_a?(self.class) && id == other.id
+    end
+    alias :== :eql?
+    def hash
+      id.hash
+    end
+    def id
+      @attributes[:_id] || @attributes['_id']
+    end
+    def id=(value)
+      @attributes[:_id] = value
+    end
+    def ==(other)
+      other.class == self.class && id == other.id
+    end
+    def collection
+      self.class.collection
+    end
+    def save(options = nil)
+      opts = !options || options.include?(:safe) ? options : {:safe => options}
+      opts[:safe].delete(:w) if MongoLight.configuration.skip_replica_concern && opts && opts.include?(:safe) && opts[:safe].is_a?(Hash)
+      collection.save(self.class.map(@attributes), opts || {})
+    end
+    def save!(options = {})
+      save({:safe => true}.merge(options))
     end
   end
 end
